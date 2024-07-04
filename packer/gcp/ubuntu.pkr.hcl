@@ -30,7 +30,7 @@ source "googlecompute" "ubuntu" {
 
   // how to crete custom image family: https://cloud.google.com/compute/docs/images/create-custom#setting_families
   source_image = "ubuntu-2204-jammy-v20240319"
-  ssh_username = "glendmaatita.me@gmail.com"
+  ssh_username = "${local.ssh_username}"
   zone = "us-central1-a"
   disk_size = 20
   machine_type = "e2-micro"
@@ -41,6 +41,10 @@ source "googlecompute" "ubuntu" {
   image_project_id = var.project_id
   image_storage_locations = ["us-central1"]
   image_family = "onxp-ubuntu-jammy"
+
+  metadata = {
+    ssh-keys = "${local.ssh_username}:$(cat ./../../keys/id_rsa.pub)"
+  }
 }
 
 build {
@@ -79,4 +83,5 @@ variable "project_id" {
 // set as image suffix
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+  ssh_username = "glendmaatita_me"
 }
